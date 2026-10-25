@@ -252,7 +252,9 @@ void Hardfault_HandlerC(uint32_t const *faultStackAddr) {
 
     reset();
 }
-__attribute__((naked)) void isr_hardfault(void) {
+// Weak like the FreeRTOS hooks above, so an application can install its own
+// hard fault handler.
+__attribute__((naked, weak)) void isr_hardfault(void) {
     __asm volatile(
         " movs r0,#4 \n"
         " movs r1, lr \n"
