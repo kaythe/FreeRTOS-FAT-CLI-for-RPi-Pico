@@ -81,7 +81,9 @@ const crash_info_t *crash_handler_get_info() {
 // void vApplicationStackOverflowHook(TaskHandle_t xTask
 // __attribute__((unused)), signed char *pcTaskName){
 
-__attribute__((noreturn))
+// The FreeRTOS hooks are weak so an application that defines its own can
+// link with this library.
+__attribute__((noreturn, weak))
 void vApplicationStackOverflowHook(TaskHandle_t xTask,
          char *pcTaskName) {
     (void)xTask;
@@ -101,6 +103,7 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask,
     reset();
     __builtin_unreachable();
 }
+__attribute__((weak))
 void vApplicationMallocFailedHook(void) {
     memset((void *)crash_info_ram_p, 0,
            sizeof crash_info_ram);  // GCC recognized as built-in function
